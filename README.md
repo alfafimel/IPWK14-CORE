@@ -24,8 +24,11 @@ You have also been requested to check whether there are any anomalies in the giv
 The dataset files for part 1, 2, 3 and 4 can be found below:
 
 Part 1 and 2: Dataset [http://bit.ly/CarreFourDataset].
+
 Part 3: Dataset [http://bit.ly/SupermarketDatasetII].
+
 Part 4: Dataset [http://bit.ly/CarreFourSalesDataset].
+
 NB: While undertaking this independent project you won't be required to write a report due to time constraint, however, it would be good practice to ensure this is also provided as part of your deliverable.
 
 # License

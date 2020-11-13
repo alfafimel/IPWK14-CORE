@@ -3,45 +3,38 @@ IPWK14-CORE - Part 3: Association Rules
 Elizabeth Josephine
 11/11/2020
 
+# PROBLEM DEFINITION
+
+## **a) Specifying the Question**
+
+create association rules that will allow you to identify relationships
+between variables in the dataset.
+
+## **b) Defining the metrics for success**
+
 This section will require that you create association rules that will
 allow you to identify relationships between variables in the dataset.
 You are provided with a separate dataset that comprises groups of items
 that will be associated with others. Just like in the other sections,
 you will also be required to provide insights for your analysis.
 
-# PROBLEM DEFINITION
+## **c) Understanding the context**
 
-## **a) Specifying the Question**
-
-Perform clustering stating insights drawn from your analysis and
-visualizations.
-
-## **b) Defining the metrics for success**
-
-Bivariates and univariate Exploratory data analysis Perform clustering
-stating insights drawn from your analysis and visualizations. Upon
-implementation, provide comparisons between the approaches learned this
-week i.e. K-Means clustering vs Hierarchical clustering highlighting the
-strengths and limitations of each approach in the context of your
-analysis. \#\# **c) Understanding the context**
-
-Kira Plastinina is a Russian brand that is sold through a defunct chain
-of retail stores in Russia, Ukraine, Kazakhstan, Belarus, China,
-Philippines, and Armenia. The brand’s Sales and Marketing team would
-like to understand their customer’s behavior from data that they have
-collected over the past year. More specifically, they would like to
-learn the characteristics of customer groups.
+You are a Data analyst at Carrefour Kenya and are currently undertaking
+a project that will inform the marketing department on the most relevant
+marketing strategies that will result in the highest no. of sales (total
+price including tax). Your project has been divided into four parts
+where you’ll explore a recent marketing dataset by performing various
+unsupervised learning techniques and later providing recommendations
+based on your insights.
 
 ## **d) Recording the Experimental Design**
 
 1.  Define the question, the metric for success, the context,
     experimental design taken.
 2.  Read and explore the given dataset.
-3.  Find and deal with outliers, anomalies, and missing data within the
-    dataset.
-4.  Perform univariate and bivariate analysis.
-5.  Perform clustering stating insights drawn from your analysis and
-    visualizations.
+3.  create association rules that will allow you to identify
+    relationships between variables in the dataset.
 
 ## **e) Relevance of the data**
 
@@ -50,7 +43,7 @@ customer’s behavior from data that they have collected over the past
 year. More specifically, to learn the characteristics of customer
 groups.
 
-\[<http://bit.ly/EcommerceCustomersDataset>\].
+\[<http://bit.ly/SupermarketDatasetII>\].
 
 # DATA ANALYSIS
 
@@ -386,7 +379,7 @@ rules <- apriori (df, parameter = list(supp = 0.001, conf = 0.8))
     ## Absolute minimum support count: 7 
     ## 
     ## set item appearances ...[0 item(s)] done [0.00s].
-    ## set transactions ...[119 item(s), 7501 transaction(s)] done [0.01s].
+    ## set transactions ...[119 item(s), 7501 transaction(s)] done [0.00s].
     ## sorting and recoding items ... [116 item(s)] done [0.00s].
     ## creating transaction tree ... done [0.00s].
     ## checking subsets of size 1 2 3 4 5 6 done [0.01s].
@@ -420,10 +413,10 @@ rules2 <- apriori (df,parameter = list(supp = 0.002, conf = 0.8))
     ## Absolute minimum support count: 15 
     ## 
     ## set item appearances ...[0 item(s)] done [0.00s].
-    ## set transactions ...[119 item(s), 7501 transaction(s)] done [0.01s].
+    ## set transactions ...[119 item(s), 7501 transaction(s)] done [0.00s].
     ## sorting and recoding items ... [115 item(s)] done [0.00s].
     ## creating transaction tree ... done [0.00s].
-    ## checking subsets of size 1 2 3 4 5 done [0.01s].
+    ## checking subsets of size 1 2 3 4 5 done [0.00s].
     ## writing ... [2 rule(s)] done [0.00s].
     ## creating S4 object  ... done [0.00s].
 
@@ -447,9 +440,9 @@ rules3 <- apriori (df, parameter = list(supp = 0.001, conf = 0.6))
     ## Absolute minimum support count: 7 
     ## 
     ## set item appearances ...[0 item(s)] done [0.00s].
-    ## set transactions ...[119 item(s), 7501 transaction(s)] done [0.01s].
+    ## set transactions ...[119 item(s), 7501 transaction(s)] done [0.00s].
     ## sorting and recoding items ... [116 item(s)] done [0.00s].
-    ## creating transaction tree ... done [0.01s].
+    ## creating transaction tree ... done [0.00s].
     ## checking subsets of size 1 2 3 4 5 6 done [0.01s].
     ## writing ... [545 rule(s)] done [0.00s].
     ## creating S4 object  ... done [0.00s].

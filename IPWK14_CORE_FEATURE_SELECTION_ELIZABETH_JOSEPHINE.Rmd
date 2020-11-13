@@ -1,0 +1,270 @@
+---
+title: "IPWK14-CORE - Part 2: Feature Selection"
+author: "Elizabeth Josephine"
+date: "11/11/2020"
+output: github_document
+---
+
+# PROBLEM DEFINITION
+## **a) Specifying the Question**
+
+perform feature selection and provide insights on the features that contribute the most information to the dataset.
+
+## **b) Defining the metrics for success**
+
+This section requires you to perform feature selection through the use of the unsupervised learning methods learned earlier this week. You will be required to perform your analysis and provide insights on the features that contribute the most information to the dataset.
+
+## **c) Understanding the context**
+
+You are a Data analyst at Carrefour Kenya and are currently undertaking a project that will inform the marketing department on the most relevant marketing strategies that will result in the highest no. of sales (total price including tax). Your project has been divided into four parts where you'll explore a recent marketing dataset by performing various unsupervised learning techniques and later providing recommendations based on your insights.
+
+## **d) Recording the Experimental Design**
+
+1.   Define the question, the metric for success, the context, experimental design taken.
+2. Read and explore the given dataset.
+3. perform feature selection and provide insights on the features that contribute the most information to the dataset.
+ 
+## **e) Relevance of the data**
+
+The data used for this project will inform the marketing department on the most relevant marketing strategies that will result in the highest no. of sales (total price including tax)
+
+[http://bit.ly/CarreFourDataset].
+
+# DATA ANALYSIS
+## DATA SOURCING
+```{R}
+# loading libraries
+library(relaimpo)
+library(data.table)
+library(ggplot2) # Data visualization
+library(ggthemes) # Plot themes
+library(plotly) # Interactive data visualizations
+library(dplyr) # Data manipulation
+library(psych) # Will be used for correlation visualization
+```
+
+```{R}
+# importing our data
+# reading our data
+df <- fread('http://bit.ly/CarreFourDataset')
+df
+```
+
+## DATA CHECKING
+```{R}
+# previewing the dataset
+View(df)
+
+```
+
+```{R}
+# previewing the column names
+colnames(df)
+
+```
+
+```{R}
+# previewing the dataset
+class(df)
+
+```
+
+```{R}
+# previewing the datatypes of the dataset
+sapply(df, class)
+```
+
+```{R}
+# previewing the head of the dataset
+head(df, n = 5)
+
+```
+
+```{R}
+# previewing the tail of the dataset
+tail(df, n = 5)
+
+```
+
+```{R}
+# checking the structure of the data
+str(df)
+
+```
+
+```{R}
+# checking the dimension/shape of the data
+dim(df) # 1000 rows and 16 columns
+```
+## DATA CLEANING
+### Missing Values
+``` {r}
+# checking for missing values
+sum(is.na(df))# there are no missing values in the data
+```
+
+``` {r}
+# displaying all rows from the dataset which don't contain any missing values 
+na.omit(df)
+```
+
+### Duplicates
+
+``` {r}
+# checking for duplicates
+duplicated_rows <- df[duplicated(df),]
+duplicated_rows # there are no duplicates in the data
+```
+
+``` {r}
+# showing these unique items and assigning to a variable unique_items below
+unique_items <- df[!duplicated(df), ]
+unique_items
+```
+
+```{r}
+# selecting the numerical data columns
+df1 <- df %>% select_if(is.numeric)
+# renaming columns for easy analysis
+df1 <- df1 %>% rename(Unit_price = "Unit price")
+df1 <- df1 %>% rename(gross_income = "gross income")
+
+# selecting needed columns
+df2 <- subset(df1, select = c("Unit_price", "Quantity", "Tax", "cogs", "gross_income", "Rating", "Total"))
+colnames(df2)
+```
+
+# Feature Selection in Unsupervised Learning
+## Using filter methods
+
+```{R}
+#loading lbraries
+library(caret)
+library(corrplot)
+colnames(df2)
+```
+
+```{R}
+# Calculating the correlation matrix
+correlationMatrix <- cor(df2)
+# Find attributes that are highly correlated
+highlyCorrelated <- findCorrelation(correlationMatrix, cutoff=0.75)
+highlyCorrelated
+#
+#names(df2[,highlyCorrelated])
+```
+
+```{R}
+# Removing Redundant Features 
+df3<-df2[-highlyCorrelated]
+```
+
+```{R}
+# Performing our graphical comparison
+par(mfrow = c(1, 2))
+corrplot(correlationMatrix, order = "hclust")
+corrplot(cor(df3), order = "hclust")
+```
+## Using Feature Ranking
+```{R}
+library(FSelector)
+colnames(df2)
+```
+
+```{R}
+Scores <- linear.correlation(Unit_price~., df2)
+Scores
+```
+
+```{R}
+#
+Subset <- cutoff.k(Scores, 5)
+as.data.frame(Subset)
+```
+
+```{R}
+Subset2 <-cutoff.k.percent(Scores, 0.4)
+as.data.frame(Subset2)
+```
+
+```{R}
+# Instead of using the scores for the correlation coefficient, 
+# we can use an entropy - based approach as shown below;
+# ---
+# 
+Scores2 <- information.gain(Unit_price~., df2)
+
+# Choosing Variables by cutoffSubset <- cutoff.k(Scores2, 5)
+Subset3 <- cutoff.k(Scores2, 5)
+as.data.frame(Subset3)
+
+```
+
+
+
+
+
+## using Wrapper Methods
+```{R}
+# Installing and loading our clustvarsel package
+suppressWarnings(
+    suppressMessages(if
+                     (!require(clustvarsel, quietly=TRUE))
+        install.packages("clustvarsel")))
+
+library(clustvarsel)
+
+```
+
+```{R}
+# Installing and loading our mclust package
+# ---
+# 
+suppressWarnings(
+    suppressMessages(if
+                     (!require(mclust, quietly=TRUE))
+        install.packages("mclust")))
+library(mclust)
+
+```
+
+```{R}
+# Sequential forward greedy search (default)
+out = clustvarsel(df, G = 1:5)
+out
+```
+
+```{R}
+# building the clustering model:
+Subset1 = df2[,out$subset]
+mod = Mclust(Subset1, G = 1:5)
+summary(mod)
+#
+plot(mod,c("classification"))
+
+```
+
+```{R}
+plot(mod,c("classification"))
+
+```
+
+## Using Embedded Methods
+```{R}
+library(wskm)
+df4 <- df[,apply(df2, 2, var, na.rm=TRUE) != 0]
+df4=prcomp(df4)
+model <- ewkm(df2[1:4], 3, lambda=2, maxiter=1000)
+```
+
+```{R}
+# Cluster Plot against 1st 2 principal components
+library("cluster")
+clusplot(df2[1:4], model$cluster, color=TRUE, shade=TRUE,
+         labels=2, lines=3,main='Cluster Analysis for Iris')
+```
+
+```{R}
+#checking weights
+round(model$weights*100,2)
+```

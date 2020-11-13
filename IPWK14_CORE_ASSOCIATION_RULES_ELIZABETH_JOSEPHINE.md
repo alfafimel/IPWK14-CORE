@@ -38,10 +38,9 @@ based on your insights.
 
 ## **e) Relevance of the data**
 
-The data used for this project is necessary for understanding their
-customer’s behavior from data that they have collected over the past
-year. More specifically, to learn the characteristics of customer
-groups.
+The data used for this project will inform the marketing department on
+the most relevant marketing strategies that will result in the highest
+no. of sales (total price including tax)
 
 \[<http://bit.ly/SupermarketDatasetII>\].
 
@@ -381,7 +380,7 @@ rules <- apriori (df, parameter = list(supp = 0.001, conf = 0.8))
     ## set item appearances ...[0 item(s)] done [0.00s].
     ## set transactions ...[119 item(s), 7501 transaction(s)] done [0.00s].
     ## sorting and recoding items ... [116 item(s)] done [0.00s].
-    ## creating transaction tree ... done [0.00s].
+    ## creating transaction tree ... done [0.01s].
     ## checking subsets of size 1 2 3 4 5 6 done [0.01s].
     ## writing ... [74 rule(s)] done [0.00s].
     ## creating S4 object  ... done [0.00s].
@@ -413,7 +412,7 @@ rules2 <- apriori (df,parameter = list(supp = 0.002, conf = 0.8))
     ## Absolute minimum support count: 15 
     ## 
     ## set item appearances ...[0 item(s)] done [0.00s].
-    ## set transactions ...[119 item(s), 7501 transaction(s)] done [0.00s].
+    ## set transactions ...[119 item(s), 7501 transaction(s)] done [0.01s].
     ## sorting and recoding items ... [115 item(s)] done [0.00s].
     ## creating transaction tree ... done [0.00s].
     ## checking subsets of size 1 2 3 4 5 done [0.00s].
@@ -445,7 +444,7 @@ rules3 <- apriori (df, parameter = list(supp = 0.001, conf = 0.6))
     ## creating transaction tree ... done [0.00s].
     ## checking subsets of size 1 2 3 4 5 6 done [0.01s].
     ## writing ... [545 rule(s)] done [0.00s].
-    ## creating S4 object  ... done [0.00s].
+    ## creating S4 object  ... done [0.01s].
 
 ``` r
 rules2

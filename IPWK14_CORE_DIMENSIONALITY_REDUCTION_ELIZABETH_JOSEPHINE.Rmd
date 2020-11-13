@@ -1,0 +1,181 @@
+---
+title: "IPWK14-CORE - Part 1: Dimensionality Reduction"
+author: "Elizabeth Josephine"
+date: "11/11/2020"
+output: github_document
+---
+
+# PROBLEM DEFINITION
+## **a) Specifying the Question**
+
+reducing your dataset to a low dimensional dataset using the PCA
+
+## **b) Defining the metrics for success**
+
+This section of the project entails reducing your dataset to a low dimensional dataset using the PCA. You will be required to perform your analysis and provide insights gained from your analysis.
+
+## **c) Understanding the context**
+
+You are a Data analyst at Carrefour Kenya and are currently undertaking a project that will inform the marketing department on the most relevant marketing strategies that will result in the highest no. of sales (total price including tax). Your project has been divided into four parts where you'll explore a recent marketing dataset by performing various unsupervised learning techniques and later providing recommendations based on your insights.
+
+## **d) Recording the Experimental Design**
+
+1.   Define the question, the metric for success, the context, experimental design taken.
+2. Read and explore the given dataset.
+3. reducing your dataset to a low dimensional dataset using the PCA
+ 
+## **e) Relevance of the data**
+
+The data used for this project will inform the marketing department on the most relevant marketing strategies that will result in the highest no. of sales (total price including tax)
+
+[http://bit.ly/CarreFourDataset]
+
+# DATA ANALYSIS
+## DATA SOURCING
+```{R}
+# loading libraries
+library(relaimpo)
+library(data.table)
+library(ggplot2) # Data visualization
+library(ggthemes) # Plot themes
+library(plotly) # Interactive data visualizations
+library(dplyr) # Data manipulation
+library(psych) # Will be used for correlation visualization
+```
+
+```{R}
+# importing our data
+# reading our data
+df <- fread('http://bit.ly/CarreFourDataset')
+df
+```
+
+## DATA CHECKING
+```{R}
+# previewing the dataset
+View(df)
+
+```
+
+```{R}
+# previewing the column names
+colnames(df)
+
+```
+
+```{R}
+# previewing the dataset
+class(df)
+
+```
+
+```{R}
+# previewing the datatypes of the dataset
+sapply(df, class)
+```
+
+```{R}
+# previewing the head of the dataset
+head(df, n = 5)
+
+```
+
+```{R}
+# previewing the tail of the dataset
+tail(df, n = 5)
+
+```
+
+```{R}
+# checking the structure of the data
+str(df)
+
+```
+
+```{R}
+# checking the dimension/shape of the data
+dim(df) # 1000 rows and 16 columns
+```
+## DATA CLEANING
+### Missing Values
+``` {r}
+# checking for missing values
+sum(is.na(df))# there are no missing values in the data
+```
+
+``` {r}
+# displaying all rows from the dataset which don't contain any missing values 
+na.omit(df)
+```
+
+### Duplicates
+
+``` {r}
+# checking for duplicates
+duplicated_rows <- df[duplicated(df),]
+duplicated_rows # there are no duplicates in the data
+```
+
+``` {r}
+# showing these unique items and assigning to a variable unique_items below
+unique_items <- df[!duplicated(df), ]
+unique_items
+```
+
+```{r}
+# selecting the numerical data columns
+df1 <- df %>% select_if(is.numeric)
+colnames(df1)
+```
+
+```{r}
+# renaming columns for easy analysis
+df1 <- df1 %>% rename(Unit_price = "Unit price")
+df1 <- df1 %>% rename(gross_income = "gross income")
+
+# selecting needed columns
+df2 <- subset(df1, select = c("Unit_price", "Quantity", "Tax", "cogs", "gross_income", "Rating", "Total"))
+colnames(df2)
+```
+
+``` {r}
+describe(df2)
+```
+
+
+
+# DIMENSIONALITY REDUCTION WITH PCA
+
+```{R}
+str(df2)
+```
+
+```{R}
+# We then pass df to the prcomp(). We also set two arguments, center and scale,
+# to be TRUE then preview our object with summary
+df3 <- prcomp(df2)
+#df4=prcomp(df4)#,center=T,scale.=T)
+#, center = TRUE, scale. = TRUE)
+summary(df3)
+```
+
+```{R}
+# Calling str() to have a look at your PCA object
+str(df3)
+```
+
+```{R}
+# Installing our ggbiplot visualisation package
+# 
+library(devtools)
+Sys.setenv(R_REMOTES_NO_ERRORS_FROM_WARNINGS="true")
+#install_github("vqv/ggbiplot",force=TRUE)
+library(ggbiplot)
+ggbiplot(df3)
+```
+```{R}
+# Adding more detail to the plot, we provide arguments rownames as labels
+# 
+ggbiplot(df3, labels=rownames(df), obs.scale = 1, var.scale = 1)
+
+```
